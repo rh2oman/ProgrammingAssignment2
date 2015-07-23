@@ -4,8 +4,7 @@
 ##                           (and the matrix has not changed), then the cachesolve should 
 ##                           retrieve the inverse from the cache.
 
-## creates a special "matrix" object that can cache its inverse
-
+## Creates the special "matrix" object that can cache its inverse
 makeCacheMatrix <- function(x = matrix()) {
 
     i <- NULL
@@ -15,7 +14,6 @@ makeCacheMatrix <- function(x = matrix()) {
         i <<- NULL
     }
     get <- function() x
-    ## Create inverse matrix of x using solve function
     setinv <- function(inv) i <<- inv
     getinv <- function() i
     list(set = set, 
@@ -24,18 +22,19 @@ makeCacheMatrix <- function(x = matrix()) {
          getinv = getinv)
 }
 
-
 ## Return a matrix that is the inverse of 'x'
 ## If the inverse matris is cached return the cached matrix,
 ## if not calculate the inverse, cache it and return the inverse.
 cacheSolve <- function(x, ...) {
-        i <- x$getinv()
-        if(!is.null(i)) {
-            message("getting cached data")
-            return(i)
-        }
-        data <- x$get()
-        i <- solve(data)
-        x$setinv(i)
-        i
+    ## Gets the inverse matrix from cached data        
+    i <- x$getinv()
+    ## If the inverse matrix exists it returns the cached inverse matrix.
+    if(!is.null(i)) {
+        return(i)
+    }
+    ## Otherwise the it gets the matrix and calculates the inverse.
+    data <- x$get()
+    i <- solve(data)
+    x$setinv(i)
+    i
 }
